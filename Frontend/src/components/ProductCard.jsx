@@ -1,34 +1,39 @@
-import React from "react";
-import api from "../services/api";
-import VideoPlayer from "./VideoPlayer"; // autoplay video on scroll
+import { motion } from "framer-motion";
 
 export default function ProductCard({ product }) {
-  const handleBuy = async () => {
-    try {
-      await api.patch(`/products/${product._id}/buy`);
-      alert("Purchased! Quantity reduced");
-    } catch (err) {
-      console.error(err);
-      alert("Purchase failed");
-    }
-  };
-
   return (
-    <div className="h-screen snap-start flex flex-col">
-      <div className="flex-3">
-        <VideoPlayer src={product.mediaUrl} />
+    <motion.div
+      whileHover={{ scale: 1.02 }}
+      className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-md shadow-xl"
+    >
+      <video
+        src={product.mediaUrl}
+        className="w-full h-[320px] object-cover"
+        muted
+        loop
+        playsInline
+        autoPlay
+      />
+
+      <div className="p-4">
+        <h3 className="text-white font-semibold">
+          {product.title}
+        </h3>
+
+        <p className="text-gray-400 text-sm line-clamp-2">
+          {product.description}
+        </p>
+
+        <div className="flex justify-between items-center mt-3">
+          <span className="text-white font-bold">
+            ₦{product.price}
+          </span>
+
+          <button className="px-3 py-1 rounded-lg bg-indigo-500 text-white text-sm">
+            Buy
+          </button>
+        </div>
       </div>
-      <div className="flex-1 p-4 bg-black">
-        <h2 className="text-lg font-bold">{product.title || "Product name"}</h2>
-        <p className="text-sm opacity-80">{product.caption || "No description"}</p>
-        <p className="text-green-400 font-bold">₦{product.price || "0"}</p>
-        <button
-          onClick={handleBuy}
-          className="mt-2 bg-red-600 px-4 py-2 rounded text-white"
-        >
-          Buy Now
-        </button>
-      </div>
-    </div>
+    </motion.div>
   );
 }
