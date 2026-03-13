@@ -1,7 +1,20 @@
 import axios from "axios";
 
+// Use environment variable for API URL
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 const api = axios.create({
-  baseURL: "https://mitransh.onrender.com/", // your deployed backend
+  baseURL: `${API_URL}/api`,
+  timeout: 10000,
+  withCredentials: true
 });
 
-export default api; //  now matches
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('mitransh_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+export default api;

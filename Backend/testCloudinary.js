@@ -1,9 +1,13 @@
-const cloudinary = require("./utils/cloudinary");
+require('dotenv').config();
+const cloudinary = require('./utils/cloudinary');
 
-cloudinary.api.resources((err, res) => {
-  if (err) {
-    console.error("Cloudinary Error:", err);
-  } else {
-    console.log("Cloudinary Connected!", res);
-  }
-});
+console.log('Testing Cloudinary connection...');
+console.log('Cloud Name:', process.env.CLOUDINARY_CLOUD_NAME);
+
+cloudinary.api.ping()
+  .then(result => {
+    console.log('✅ Cloudinary connected successfully!', result);
+  })
+  .catch(error => {
+    console.error('❌ Cloudinary connection failed:', error);
+  });

@@ -4,7 +4,7 @@ export const uploadToCloudinary = async (file) => {
   formData.append("upload_preset", "tiktok_upload");
 
   const res = await fetch(
-    "https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/video/upload",
+    "https://api.cloudinary.com/v1_1/dzuzbvgrq/image/upload",
     {
       method: "POST",
       body: formData,

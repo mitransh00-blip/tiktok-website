@@ -1,37 +1,20 @@
-// upload.js (controller)
-const cloudinary = require("../utils/cloudinary");
-const Post = require("../models/Post");
+const express = require("express");
+const multer = require("multer");
+const { uploadMedia } = require("./utils/uploadController"); // ← FIXED PATH
+const auth = require("../middleware/auth"); // Add auth if you want protection
 
-const uploadMedia = async (req, res) => {
-  try {
-    const { userId, caption } = req.body;
+const router = express.Router();
 
-    if (!req.file) {
-      return res.status(400).json({ msg: "No file uploaded" });
-    }
+// Configure multer for temporary storage
+const storage = multer.diskStorage({
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
 
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      resource_type: "auto",  // To handle both images and videos
-    });
+const upload = multer({ storage });
 
-    // Save the post with the uploaded file's URL
-    const newPost = new Post({
-      user: userId,
-      mediaUrl: result.secure_url,
-      caption,
-    });
+// Upload route - you can add auth middleware if needed
+router.post("/", upload.single("file"), uploadMedia);
 
-    await newPost.save();
-
-    // Return the response to the client
-    res.json({
-      msg: "Post uploaded successfully",
-      post: newPost,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Server error");
-  }
-};
-
-module.exports = { uploadMedia };
+module.exports = router;

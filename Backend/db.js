@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const connectDB = async () => {
   try {
     await mongoose.connect(
-      "mongodb+srv://mitransh:Godisreal123@cluster0.xku3kgl.mongodb.net/tiktokDB"
+      "mongodb+srv://mitransh:4sH3ivIIRmF2y1re@cluster0.xku3kgl.mongodb.net/mitransh?appName=Cluster0"
     );
     console.log("MongoDB connected!");
   } catch (err) {
@@ -12,4 +13,5 @@ const connectDB = async () => {
   }
 };
 
-module.exports = connectDB;
+module.exports = mongoose;
+module.exports.connectDB = connectDB;
